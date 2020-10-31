@@ -1,6 +1,4 @@
-# OS_lab2
-
-## Lab 2: Critical region
+# Lab 2: Critical region
 
 This lab should be done in a team with each student assigned individual item. It is preferable to use the same implementation language by all team members. Supposed implementation languages are Java and C++. Implementation of some items, e.g. 6, in C requires modeling interfaces with structures consisting of function pointers or extensive usage of macros.
 
@@ -20,7 +18,7 @@ Realize Lamport algorithm (bakery algorithm). Develop BakeryLock type that provi
 
 Simulate deadlock and item loss in producer-consumer problem solution with sleep-wakeup primitives.
 
-## Task 5
+### Task 5
 
 Using atomic variable improve Lamport mutual exclusion algorithm (bakery algorithm) so that every thread would receive unique ticket. Consider the problem of bounding the value of this variable.Develop ImrovedBakeryLock type that provides java.util.concurrent.Lock interface or Lockable concept in the case of C++ (see 6)
 
