@@ -1,5 +1,6 @@
 package task6;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -17,6 +18,14 @@ public abstract class AbstractFixnumLock implements FixnumLock {
         this.idMap = new ConcurrentHashMap<Thread, Integer>();
     }
 
+    public static <T> ArrayList<T> getFilledList(int size, T value) {
+        ArrayList<T> list = new ArrayList<>();
+        for(int i = 0; i < size; ++i) {
+            list.add(value);
+        }
+        return list;
+    }
+
     public int getMaxNumberOfThreads() {
         return maxNumberOfThreads;
     }
@@ -31,11 +40,12 @@ public abstract class AbstractFixnumLock implements FixnumLock {
     }
 
     @Override
-    public void register() {
+    public boolean register() {
         if (counter.get() == maxNumberOfThreads) {
-            throw new IllegalStateException("This lock allows only " + maxNumberOfThreads + " threads");
+            return false;
         }
         idMap.put(Thread.currentThread(), counter.getAndIncrement());
+        return true;
     }
 
     @Override
