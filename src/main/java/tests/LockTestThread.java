@@ -18,14 +18,8 @@ public class LockTestThread extends Thread {
         while(!lock.register()) {
             Thread.yield();
         }
-        if (getId() == 0) {
-            try {
-                Thread.sleep(1000);
-            }
-      catch (Exception e) {
 
-      }
-        }
+
         lock.lock();
         System.out.println("Locked thread: " + Thread.currentThread().getName());
         for (int i = 0; i < 100000; i++) {
