@@ -5,7 +5,7 @@ import java.util.concurrent.locks.Lock;
 public interface FixnumLock extends Lock {
 
     int getId();
-    void register();
+    boolean register();
     void unregister();
 
     int getMaxNumberOfThreads();
