@@ -6,9 +6,11 @@ import java.util.ArrayList;
 
 public class DekkerLockTest {
 
-    public static void main(String[] args) {
-        test(new WithoutLockTestThread());
+    public static void main(String[] args) throws InterruptedException{
         test(new LockTestThread(new DekkerLock(2)));
+        Thread.sleep(1000);
+        test(new WithoutLockTestThread());
+
         printResult();
     }
 

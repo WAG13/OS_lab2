@@ -19,6 +19,7 @@ public class LockTestThread extends Thread {
             Thread.yield();
         }
 
+
         lock.lock();
         System.out.println("Locked thread: " + Thread.currentThread().getName());
         for (int i = 0; i < 100000; i++) {
