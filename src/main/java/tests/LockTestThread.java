@@ -1,13 +1,17 @@
+package tests;
+
 import task6.FixnumLock;
+
 public class LockTestThread extends Thread {
     private FixnumLock lock;
     volatile static int value = 0;
-    public LockTestThread(FixnumLock lock) {
 
+    public LockTestThread(FixnumLock lock) {
         super();
         System.out.println("Creating new thread...");
         this.lock = lock;
     }
+
     @Override
     public void run() {
 

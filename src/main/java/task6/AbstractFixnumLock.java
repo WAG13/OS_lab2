@@ -1,10 +1,11 @@
 package task6;
 
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.Condition;
 
 public abstract class AbstractFixnumLock implements FixnumLock {
 
@@ -16,14 +17,6 @@ public abstract class AbstractFixnumLock implements FixnumLock {
         this.maxNumberOfThreads = maxNumberOfThreads;
         this.counter = new AtomicInteger(0);
         this.idMap = new ConcurrentHashMap<Thread, Integer>();
-    }
-
-    public static <T> ArrayList<T> getFilledList(int size, T value) {
-        ArrayList<T> list = new ArrayList<>();
-        for(int i = 0; i < size; ++i) {
-            list.add(value);
-        }
-        return list;
     }
 
     public int getMaxNumberOfThreads() {
@@ -62,5 +55,26 @@ public abstract class AbstractFixnumLock implements FixnumLock {
             }
         }
         counter.decrementAndGet();
+    }
+
+
+    @Override
+    public void lockInterruptibly() throws InterruptedException {
+
+    }
+
+    @Override
+    public boolean tryLock() {
+        return false;
+    }
+
+    @Override
+    public boolean tryLock(long time, TimeUnit unit) throws InterruptedException {
+        return false;
+    }
+
+    @Override
+    public Condition newCondition() {
+        return null;
     }
 }

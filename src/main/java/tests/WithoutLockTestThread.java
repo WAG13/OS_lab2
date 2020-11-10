@@ -1,3 +1,5 @@
+package tests;
+
 public class WithoutLockTestThread implements Runnable {
     public static int counter = 0;
 

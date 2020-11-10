@@ -1,3 +1,4 @@
+package tests;
 
 import task1.DekkerLock;
 
@@ -7,7 +8,7 @@ public class DekkerLockTest {
 
     public static void main(String[] args) {
         test(new WithoutLockTestThread());
-        test(new LockTestThread(new DekkerLock()));
+        test(new LockTestThread(new DekkerLock(2)));
         printResult();
     }
 
