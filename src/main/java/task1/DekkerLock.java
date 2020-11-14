@@ -11,7 +11,7 @@ public class DekkerLock extends AbstractFixnumLock {
     private volatile ArrayList<Boolean> flag = getFilledList(getMaxNumberOfThreads(), false);
 
     public DekkerLock (int maxNumberOfThreads) {
-        super(maxNumberOfThreads);
+        super(2);
     }
 
     @Override
