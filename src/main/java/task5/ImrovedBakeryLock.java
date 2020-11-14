@@ -5,12 +5,12 @@ import task6.AbstractFixnumLock;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicIntegerArray;
 
-public class BakeryLock extends AbstractFixnumLock {
+public class ImrovedBakeryLock extends AbstractFixnumLock {
     private static AtomicInteger currTicket;
 
     private AtomicIntegerArray tickets = new AtomicIntegerArray(getMaxNumberOfThreads());
 
-    public BakeryLock(int maxNumberOfThreads) {
+    public ImrovedBakeryLock(int maxNumberOfThreads) {
         super(maxNumberOfThreads);
         currTicket = new AtomicInteger(0);
     }
