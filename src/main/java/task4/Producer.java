@@ -12,18 +12,20 @@ public class Producer extends Thread {
 
     @Override
     public void run() {
-        while (!stopped) {
-            queue.put(counter++);
-            if (counter == Integer.MAX_VALUE) counter = 0;
+        synchronized (queue) {
+            while (!stopped) {
+                queue.put(counter++);
+                if (counter == Integer.MAX_VALUE) counter = 0;
+            }
         }
+
     }
 
-    public synchronized void stopProducer() {
+    public void stopProducer() {
+        synchronized (queue) {
+            stopped = true;
+            ItemLossQueue.check = false;
 
-        stopped = true;
-        ItemLossQueue.check = false;
-
-        ItemLossQueue.isReady = false;
-
+        }
     }
 }

@@ -23,19 +23,22 @@ public class Consumer extends Thread {
     @Override
     public void run() {
         while (true) {
-            int item = queue.take();
+            synchronized (queue) {
+                int item = queue.take();
 
-            if (item != counter) {
-                System.out.println("Item lost: " + counter);
-                if (callback != null)
-                {
-                    callback.onItemLost();
+                if (item != counter) {
+                    System.out.println("Item lost: " + counter);
+                    if (callback != null)
+                    {
+                        callback.onItemLost();
+                    }
+                    break;
                 }
-                break;
+                else {
+                    counter++;
+                }
             }
-            else {
-                counter++;
-            }
+
         }
     }
 }

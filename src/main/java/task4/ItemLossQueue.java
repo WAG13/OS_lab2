@@ -4,7 +4,7 @@ public class ItemLossQueue implements Queue {
     private int item = -1;
     protected static int EMPTY_QUEUE = -1;
     public static boolean check = true;
-    public static boolean isReady = true;
+    public static boolean isReady = false;
     @Override
     public synchronized void put(int item){
 
@@ -22,7 +22,7 @@ public class ItemLossQueue implements Queue {
                 break;
             }
             try {
-                System.out.println("Derack");
+                isReady = true;
                 wait();
 
             }
@@ -32,13 +32,14 @@ public class ItemLossQueue implements Queue {
 
 
         }
+        isReady = false;
         if (check) {
             if (Math.random() > 0.2 ){
                 this.item = item;
 
                 System.out.println("Produced: " + item);
 
-                isReady = false;
+
 
             }
             else {
@@ -83,7 +84,7 @@ public class ItemLossQueue implements Queue {
             this.item = EMPTY_QUEUE;
 
 
-            System.out.println("Consumed: " + item);
+            System.out.println("Consumed: " + taken);
             notifyAll();
             return taken;
         }
