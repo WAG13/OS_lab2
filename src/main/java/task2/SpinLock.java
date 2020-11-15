@@ -1,15 +1,22 @@
 package task2;
 
+import task6.AbstractFixnumLock;
+
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
 
-public class SpinLock implements Lock {
-    private final AtomicInteger indicator = new AtomicInteger(0);
+public class SpinLock extends AbstractFixnumLock {
+    private final AtomicInteger indicator;
+
+    public SpinLock(int maxNumberOfThreads) {
+        super(maxNumberOfThreads);
+        indicator = new AtomicInteger(0);
+    }
 
     @Override
     public void lock() {
+        getId();
         while (!indicator.compareAndSet(0, 1));
     }
 
