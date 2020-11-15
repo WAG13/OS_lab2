@@ -45,9 +45,6 @@ public abstract class AbstractFixnumLock implements FixnumLock {
             }
         }
 
-        if (position == -1)
-            return false;
-
         idMap.put(Thread.currentThread(), position);
         return true;
     }
@@ -60,7 +57,6 @@ public abstract class AbstractFixnumLock implements FixnumLock {
 
     public void reset(){
         idMap.clear();
-        return;
     }
 
     @Override
