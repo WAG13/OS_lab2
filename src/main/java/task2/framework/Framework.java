@@ -13,7 +13,7 @@ public class Framework {
 
     public static void main(String[] args) {
         final int numOfThreads = 10;
-        final int operationsPerThread = 1000;
+        final int operationsPerThread = 50;
 
         System.out.println("ATOMIC\n");
         Counter counter = new AtomicCounter(false);
