@@ -31,7 +31,7 @@ public class DekkerLock extends AbstractFixnumLock {
     @Override
     public void unlock() {
         flag.set(getId(), false);
-
+        turn = invertedPid();
     }
 
     private int invertedPid() {
