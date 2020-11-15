@@ -5,19 +5,23 @@ public class Producer extends Thread {
     private int counter = 0;
 
     public static boolean stopped = false;
-
-    public Producer(Queue queue) {
+    private String type;
+    public Producer(Queue queue, String type) {
         this.queue = queue;
+        this.type = type;
     }
 
     @Override
     public void run() {
-        synchronized (queue) {
-            while (!stopped) {
-                queue.put(counter++);
-                if (counter == Integer.MAX_VALUE) counter = 0;
+        if (type.equals("DEADLOCK")) {
+            executeTasks();
+        }
+        else {
+            synchronized (queue) {
+                executeTasks();
             }
         }
+
 
     }
 
@@ -26,6 +30,12 @@ public class Producer extends Thread {
             stopped = true;
             ItemLossQueue.check = false;
 
+        }
+    }
+    private void executeTasks() {
+        while (!stopped) {
+            queue.put(counter++);
+            if (counter == Integer.MAX_VALUE) counter = 0;
         }
     }
 }

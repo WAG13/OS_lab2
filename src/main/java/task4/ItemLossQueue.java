@@ -2,7 +2,7 @@ package task4;
 
 public class ItemLossQueue implements Queue {
     private int item = -1;
-    protected static int EMPTY_QUEUE = -1;
+    private static int EMPTY_QUEUE = -1;
     public static boolean check = true;
     public static boolean isReady = false;
     @Override
@@ -38,8 +38,6 @@ public class ItemLossQueue implements Queue {
                 this.item = item;
 
                 System.out.println("Produced: " + item);
-
-
 
             }
             else {
