@@ -1,21 +1,19 @@
 package task6;
 
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Condition;
 
 public abstract class AbstractFixnumLock implements FixnumLock {
 
-    private AtomicInteger counter;
     private ConcurrentMap<Thread, Integer> idMap;
     private int maxNumberOfThreads;
 
     public AbstractFixnumLock(int maxNumberOfThreads) {
         this.maxNumberOfThreads = maxNumberOfThreads;
-        this.counter = new AtomicInteger(0);
         this.idMap = new ConcurrentHashMap<Thread, Integer>();
     }
 
@@ -33,30 +31,37 @@ public abstract class AbstractFixnumLock implements FixnumLock {
     }
 
     @Override
-    public boolean register() {
-        if (counter.get() == maxNumberOfThreads) {
+    public synchronized boolean register() {
+
+        if (!idMap.containsKey(Thread.currentThread()) || idMap.size() >= maxNumberOfThreads)
             return false;
+
+        Set<Integer> set = new HashSet<>(idMap.values());
+        int position = -1;
+        for (int i = 0; i < maxNumberOfThreads; i++) {
+            if (!set.contains(i)) {
+                position = i;
+                break;
+            }
         }
-        idMap.put(Thread.currentThread(), counter.getAndIncrement());
+
+        if (position == -1)
+            return false;
+
+        idMap.put(Thread.currentThread(), position);
         return true;
     }
 
     @Override
-    public synchronized void unregister() {
+    public void unregister() {
         Thread currentThread = Thread.currentThread();
-        int removedId = idMap.get(currentThread);
         idMap.remove(currentThread);
-
-        // reindexing
-        for (Map.Entry<Thread, Integer> entry : idMap.entrySet()) {
-            int value = entry.getValue();
-            if (value > removedId) {
-                entry.setValue(value - 1);
-            }
-        }
-        counter.decrementAndGet();
     }
 
+    public void reset(){
+        idMap.clear();
+        return;
+    }
 
     @Override
     public void lockInterruptibly() throws InterruptedException {
