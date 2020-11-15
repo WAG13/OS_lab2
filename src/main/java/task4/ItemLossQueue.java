@@ -6,7 +6,7 @@ public class ItemLossQueue implements Queue {
     public static boolean check = true;
     public static boolean isReady = false;
     @Override
-    public synchronized void put(int item){
+    public  void put(int item){
 
 //
 //        while (this.item != EMPTY_QUEUE && check) {
@@ -55,7 +55,7 @@ public class ItemLossQueue implements Queue {
 
     }
 
-    public synchronized int take(){
+    public  int take(){
 
 //        while (isReady) {
 //            try {
@@ -70,7 +70,7 @@ public class ItemLossQueue implements Queue {
                 break;
             }
             try {
-                System.out.println("Kek lol");
+
                 wait();
             }
             catch (Exception ex) {
