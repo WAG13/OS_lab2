@@ -8,51 +8,94 @@ public class ItemLossQueue implements Queue {
     @Override
     public synchronized void put(int item){
 
-
-        while (this.item != EMPTY_QUEUE && check) {
+//
+//        while (this.item != EMPTY_QUEUE && check) {
+//            try {
+//                wait();
+//            }
+//            catch (Exception ex) {
+//
+//            }
+//        }
+        while (this.item != EMPTY_QUEUE) {
+            if (!check) {
+                break;
+            }
             try {
+                System.out.println("Derack");
                 wait();
+
             }
             catch (Exception ex) {
 
             }
+
+
         }
-        if (Math.random() > 0.2 ){
-            this.item = item;
-            notificate("Produced: ", item);
-            isReady = false;
+        if (check) {
+            if (Math.random() > 0.2 ){
+                this.item = item;
+
+                System.out.println("Produced: " + item);
+
+                isReady = false;
+
+            }
+            else {
+
+                System.out.println("Lost item: " + item);
+
+
+                //  Producer.stopped = true;
+            }
+            notify();
         }
-        else {
-            notificate("Lost item: ", item);
-            Producer.stopped = true;
-        }
+
 
     }
 
     public synchronized int take(){
 
-        while (isReady) {
+//        while (isReady) {
+//            try {
+//                wait();
+//            }
+//            catch (Exception ex) {
+//
+//            }
+//        }
+        while (item == EMPTY_QUEUE) {
+            if (!check) {
+                break;
+            }
             try {
+                System.out.println("Kek lol");
                 wait();
             }
             catch (Exception ex) {
 
             }
+
+        }
+
+        if (check) {
+            int taken = this.item;
+            this.item = EMPTY_QUEUE;
+
+
+            System.out.println("Consumed: " + item);
+            notifyAll();
+            return taken;
         }
 
 
-        int taken = this.item;
-        this.item = EMPTY_QUEUE;
 
-        notificate("Consumed: ", taken);
-        isReady = true;
-        return taken;
+        return -1;
     }
 
-    protected synchronized void notificate(String action, int item){
-        System.out.println(action + item);
-        isReady = false;
-        notify();
-
-    }
+//    protected  void notificate(String action, int item){
+//
+//
+//
+//    }
 }

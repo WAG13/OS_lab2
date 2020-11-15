@@ -18,10 +18,11 @@ public class Producer extends Thread {
         }
     }
 
-    public void stopProducer() {
+    public synchronized void stopProducer() {
+
         stopped = true;
         ItemLossQueue.check = false;
-      //  notifyAll();
+
         ItemLossQueue.isReady = false;
 
     }

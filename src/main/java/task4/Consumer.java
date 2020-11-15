@@ -27,7 +27,10 @@ public class Consumer extends Thread {
 
             if (item != counter) {
                 System.out.println("Item lost: " + counter);
-                if (callback != null) callback.onItemLost();
+                if (callback != null)
+                {
+                    callback.onItemLost();
+                }
                 break;
             }
             else {
