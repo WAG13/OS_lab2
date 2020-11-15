@@ -14,7 +14,7 @@ public abstract class AbstractFixnumLock implements FixnumLock {
 
     public AbstractFixnumLock(int maxNumberOfThreads) {
         this.maxNumberOfThreads = maxNumberOfThreads;
-        this.idMap = new ConcurrentHashMap<Thread, Integer>();
+        this.idMap = new ConcurrentHashMap<>();
     }
 
     public int getMaxNumberOfThreads() {
@@ -33,8 +33,9 @@ public abstract class AbstractFixnumLock implements FixnumLock {
     @Override
     public synchronized boolean register() {
 
-        if (!idMap.containsKey(Thread.currentThread()) || idMap.size() >= maxNumberOfThreads)
+        if (idMap.containsKey(Thread.currentThread()) || idMap.size() >= maxNumberOfThreads) {
             return false;
+        }
 
         Set<Integer> set = new HashSet<>(idMap.values());
         int position = -1;
