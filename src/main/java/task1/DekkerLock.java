@@ -8,9 +8,9 @@ import static utils.Utils.getFilledList;
 public class DekkerLock extends AbstractFixnumLock {
     private volatile static int turn = 0;
 
-    private volatile ArrayList<Boolean> flag = getFilledList(getMaxNumberOfThreads(), false);
+    private volatile ArrayList<Boolean> flag = getFilledList(2, false);
 
-    public DekkerLock (int maxNumberOfThreads) {
+    public DekkerLock () {
         super(2);
     }
 
