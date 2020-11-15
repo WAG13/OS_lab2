@@ -34,20 +34,20 @@ public class FixnumLockBenchmark {
             long start;
             lock.register();
 
+            start = System.currentTimeMillis();
             for (int i = 0; i < numOfOperations; i++) {
-                start = System.currentTimeMillis();
                 lock.lock();
 
                 counter.set(counter.intValue() + 1);
                 if (showCounterManipulations) {
                     System.out.println("[Increment]\n" +
-                            "Thread id: " + Thread.currentThread().getId() + "\n" +
-                            "Counter: " + counter + "\n");
+                                       "Thread id: " + Thread.currentThread().getId() + "\n" +
+                                       "Counter: " + counter + "\n");
                 }
 
                 lock.unlock();
-                elapsedTime += System.currentTimeMillis() - start;
             }
+            elapsedTime += System.currentTimeMillis() - start;
 
             return (double) elapsedTime / numOfOperations;
         }
@@ -74,20 +74,20 @@ public class FixnumLockBenchmark {
             long start;
             lock.register();
 
+            start = System.currentTimeMillis();
             for (int i = 0; i < numOfOperations; i++) {
-                start = System.currentTimeMillis();
                 lock.lock();
 
                 counter.set(counter.intValue() - 1);
                 if (showCounterManipulations) {
                     System.out.println("[Decrement]\n" +
-                            "Thread id: " + Thread.currentThread().getId() + "\n" +
-                            "Counter: " + counter + "\n");
+                                       "Thread id: " + Thread.currentThread().getId() + "\n" +
+                                       "Counter: " + counter + "\n");
                 }
 
                 lock.unlock();
-                elapsedTime += System.currentTimeMillis() - start;
             }
+            elapsedTime += System.currentTimeMillis() - start;
 
             return (double) elapsedTime / numOfOperations;
         }
@@ -107,6 +107,10 @@ public class FixnumLockBenchmark {
         ExecutorService executorService = Executors.newFixedThreadPool(numOfThreads);
         List<Future<Double>> futures = new ArrayList<>(numOfThreads);
         double elapsedTime = 0;
+
+        if (showCounterManipulations) {
+            System.out.println("Initial counter: 0\n");
+        }
 
         for (int i = 0; i < numOfThreads / 2; i++) {
             futures.add(executorService.submit(
