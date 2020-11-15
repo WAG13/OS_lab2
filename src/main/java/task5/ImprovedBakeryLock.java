@@ -6,12 +6,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicIntegerArray;
 
 public class ImprovedBakeryLock extends AbstractFixnumLock {
-    private static AtomicInteger currTicket;
 
-    private AtomicIntegerArray tickets = new AtomicIntegerArray(getMaxNumberOfThreads());
+    private static AtomicInteger currTicket;
+    private AtomicIntegerArray tickets;
 
     public ImprovedBakeryLock(int maxNumberOfThreads) {
         super(maxNumberOfThreads);
+        tickets = new AtomicIntegerArray(maxNumberOfThreads);
         currTicket = new AtomicInteger(0);
     }
 
@@ -19,12 +20,14 @@ public class ImprovedBakeryLock extends AbstractFixnumLock {
     public void lock() {
         tickets.set(getId(), currTicket.incrementAndGet());
 
-        for (int i = 0; i < tickets.length(); ++i)
-            if (i != getId())
-                while ( tickets.get(i) != 0 && (tickets.get(getId()) > tickets.get(i)))
+        for (int i = 0; i < tickets.length(); ++i){
+            if (i != getId()){
+                while ( tickets.get(i) != 0 && (tickets.get(getId()) > tickets.get(i))){
                     Thread.yield();
+                }
+            }
+        }
 
-        //System.out.println("Ticket In Critical Section: " + tickets.get(getId()));
     }
 
     @Override
