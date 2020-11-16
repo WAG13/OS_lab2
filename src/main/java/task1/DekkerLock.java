@@ -1,14 +1,12 @@
 package task1;
 
 import task6.AbstractFixnumLock;
-import java.util.ArrayList;
 
-import static utils.Utils.getFilledList;
 
 public class DekkerLock extends AbstractFixnumLock {
     private volatile static int turn = 0;
 
-    private volatile ArrayList<Boolean> flag = getFilledList(2, false);
+    private volatile boolean flag[] = {false, false};
 
     public DekkerLock () {
         super(2);
@@ -16,25 +14,24 @@ public class DekkerLock extends AbstractFixnumLock {
 
     @Override
     public void lock() {
-        flag.set(getId(), true);
-        while(flag.get(invertedPid())) {
+        flag[getId()] = true;
+
+        while(flag[getAnotherProcessId()]) {
             if (turn != getId()) {
-                flag.set(getId(), false);
-                while (turn != getId()) {
-                    Thread.yield();
-                }
-                flag.set(getId(), true);
+                flag[getId()] = false;
+                while (turn != getId()) { }
+                flag[getId()] = true;
             }
         }
     }
 
     @Override
     public void unlock() {
-        flag.set(getId(), false);
-        turn = invertedPid();
+        flag[getId()] = false;
+        turn = getAnotherProcessId();
     }
 
-    private int invertedPid() {
+    private int getAnotherProcessId() {
         return getId()^1;
     }
 }
