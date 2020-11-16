@@ -1,13 +1,13 @@
 package task4;
 
 public class DeadLockQueue implements Queue {
-    private int item = -1;
+    private int item = ItemLossQueue.EMPTY_QUEUE;
 
     @Override
     public void put(int item) {
-        System.out.println("Putting item " + item);
+        System.out.println("Produced item " + item);
 
-        while (this.item != -1) {
+        while (this.item != ItemLossQueue.EMPTY_QUEUE) {
             synchronized (this) {
                 try {
                     System.out.println("Producer waiting");
@@ -29,7 +29,7 @@ public class DeadLockQueue implements Queue {
 
     @Override
     public int take() {
-        while (item == -1) {
+        while (item == ItemLossQueue.EMPTY_QUEUE) {
             synchronized (this) {
                 try {
                     System.out.println("Consumer waiting");
@@ -40,10 +40,10 @@ public class DeadLockQueue implements Queue {
             }
         }
 
-        System.out.println("Getting item " + item);
+        System.out.println("Consumed item " + item);
 
         int res = item;
-        item = -1;
+        item = ItemLossQueue.EMPTY_QUEUE;
         synchronized (this) {
             try {
                 notifyAll();
