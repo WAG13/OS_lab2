@@ -1,11 +1,11 @@
 package task4;
 
-public class ItemLossSimulation {
+public class DeadLockSimulation {
     public static void main(String[] args) {
-        Queue queue = new ItemLossQueue();
-        Producer producer = new Producer(queue, "ITEMLOSS");
-        Consumer consumer = new Consumer(queue, producer::stopProducer, "ITEMLOSS");
+        Queue queue = new DeadLockQueue();
 
+        Producer producer = new Producer(queue, "DEADLOCK");
+        Consumer consumer = new Consumer(queue, producer::stopProducer, "DEADLOCK");
 
         producer.start();
         consumer.start();
