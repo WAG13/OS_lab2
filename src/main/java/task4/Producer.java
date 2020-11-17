@@ -28,7 +28,7 @@ public class Producer extends Thread {
     public void stopProducer() {
         synchronized (queue) {
             stopped = true;
-            ItemLossQueue.check = false;
+            ItemLossQueue.stopQueue = false;
 
         }
     }

@@ -3,25 +3,25 @@ package task4;
 public class ItemLossQueue implements Queue {
     private int item = -1;
     public static int EMPTY_QUEUE = -1;
-    public static boolean check = true;
-    public static boolean isReady = false;
+
+    public static boolean stopQueue = true;
+
     @Override
     public  void put(int item){
 
         while (this.item != EMPTY_QUEUE) {
-            if (!check) {
+            if (!stopQueue) {
                 break;
             }
             try {
-                isReady = true;
                 wait();
-
             }
             catch (Exception ex) {
+                ex.printStackTrace();
             }
         }
-        isReady = false;
-        if (check) {
+
+        if (stopQueue) {
             if (Math.random() > 0.2 ){
                 this.item = item;
 
@@ -37,33 +37,27 @@ public class ItemLossQueue implements Queue {
 
     }
 
-    public  int take(){
+    public int take(){
 
         while (item == EMPTY_QUEUE) {
-            if (!check) {
+            if (!stopQueue) {
                 break;
             }
             try {
-
                 wait();
             }
             catch (Exception ex) {
-
+                ex.printStackTrace();
             }
-
         }
 
-        if (check) {
+        if (stopQueue) {
             int taken = this.item;
             this.item = EMPTY_QUEUE;
-
-
             System.out.println("Consumed: " + taken);
             notifyAll();
             return taken;
         }
-
-
 
         return -1;
     }
