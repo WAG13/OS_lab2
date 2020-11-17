@@ -13,6 +13,7 @@ public class DeadLockQueue implements Queue {
                     System.out.println("Producer waiting");
                     wait();
                 } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         }
