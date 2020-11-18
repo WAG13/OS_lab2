@@ -1,6 +1,4 @@
-package tests;
-
-import task1.DekkerLock;
+package task1;
 
 import java.util.ArrayList;
 

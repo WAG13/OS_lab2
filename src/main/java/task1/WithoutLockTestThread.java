@@ -1,4 +1,4 @@
-package tests;
+package task1;
 
 public class WithoutLockTestThread implements Runnable {
     public static int counter = 0;

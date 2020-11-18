@@ -1,4 +1,4 @@
-package tests;
+package task1;
 
 import task6.FixnumLock;
 
