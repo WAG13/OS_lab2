@@ -11,10 +11,13 @@ public class ImprovedBakeryLock extends AbstractFixnumLock {
     private static final int MAX = Integer.MAX_VALUE;
     private AtomicIntegerArray tickets;
 
+    private Thread lastThread;
+
     public ImprovedBakeryLock(int maxNumberOfThreads) {
         super(maxNumberOfThreads);
         tickets = new AtomicIntegerArray(maxNumberOfThreads);
         currTicket = new AtomicInteger(1);
+        lastThread = null;
     }
 
     @Override
@@ -36,12 +39,14 @@ public class ImprovedBakeryLock extends AbstractFixnumLock {
             int ticket = currTicket.get();
             if (ticket == MAX) {
                 if (currTicket.compareAndSet(MAX, 1)) {
+                    lastThread = Thread.currentThread();
                     return MAX;
                 } else {
                     continue;
                 }
             }
             if (currTicket.compareAndSet(ticket, ticket + 1)) {
+                while (lastThread != null);
                 return ticket;
             }
         }
@@ -49,6 +54,9 @@ public class ImprovedBakeryLock extends AbstractFixnumLock {
 
     @Override
     public void unlock() {
+        if (Thread.currentThread() == lastThread) {
+            lastThread = null;
+        }
         tickets.set(getId(), 0);
     }
 
