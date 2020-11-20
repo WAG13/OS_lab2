@@ -5,11 +5,12 @@ import java.util.ArrayList;
 public class DekkerLockTest {
 
     public static void main(String[] args) throws InterruptedException{
-        test(new LockTestThread(new DekkerLock()));
+        Counter counterObject = new Counter();
+        test(new LockPlusTestThread(new DekkerLock(),counterObject));
         Thread.sleep(1000);
         test(new WithoutLockTestThread());
 
-        printResult();
+        printResult(counterObject);
     }
 
     private static void test(Runnable runnable) {
@@ -34,9 +35,9 @@ public class DekkerLockTest {
 
 
     }
-    private static void printResult() {
+    private static void printResult(Counter counterObject) {
         System.out.println("----------------------------------------------------");
-        System.out.println(("Counter with Lock: " + LockTestThread.value));
+        System.out.println(("Counter with Lock: " + counterObject.counter));
         System.out.println(("Counter without Lock: " + WithoutLockTestThread.counter));
         System.out.println("----------------------------------------------------");
     }

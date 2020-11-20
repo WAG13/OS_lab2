@@ -10,12 +10,10 @@ public class WithoutLockTestThread implements Runnable {
     @Override
     public void run() {
         System.out.println("Thread without lock: " + Thread.currentThread().getName());
-        for (int i = 0; i < 100000; i++) {
-            f();
+        for (int i = 0; i < 10000; i++) {
+            counter++;
         }
     }
 
-    private void f() {
-        counter++;
-    }
+
 }
