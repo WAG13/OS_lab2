@@ -27,6 +27,12 @@ public class ImprovedBakeryLockTest {
                     "Thread id: " + lock.getId() + "\n" +
                     "Counter: " + counter + "\n");
             lock.unlock();
+            lock.lock();
+            counter.set(counter.intValue() + 1);
+            System.out.println("[Increment]\n" +
+                    "Thread id: " + lock.getId() + "\n" +
+                    "Counter: " + counter + "\n");
+            lock.unlock();
         }
     }
 
@@ -42,6 +48,12 @@ public class ImprovedBakeryLockTest {
         @Override
         public void run() {
             lock.register();
+            lock.lock();
+            counter.set(counter.intValue() - 1);
+            System.out.println("[Decrement]\n" +
+                    "Thread id: " + lock.getId() + "\n" +
+                    "Counter: " + counter + "\n");
+            lock.unlock();
             lock.lock();
             counter.set(counter.intValue() - 1);
             System.out.println("[Decrement]\n" +

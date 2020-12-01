@@ -4,34 +4,38 @@ import task6.AbstractFixnumLock;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicIntegerArray;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class ImprovedBakeryLock extends AbstractFixnumLock {
 
     private static AtomicInteger currTicket;
-    private static final int MAX = Integer.MAX_VALUE;
-    private AtomicIntegerArray tickets;
+    private final int MAX;
+    private final AtomicIntegerArray tickets;
 
-    private Thread lastThread;
+    private AtomicReference<Thread> lastThread;
 
     public ImprovedBakeryLock(int maxNumberOfThreads) {
         super(maxNumberOfThreads);
         tickets = new AtomicIntegerArray(maxNumberOfThreads);
         currTicket = new AtomicInteger(1);
-        lastThread = null;
+        lastThread = new AtomicReference<>(null);
+        MAX = maxNumberOfThreads;
     }
 
     @Override
     public void lock() {
         tickets.set(getId(), getAndChange());
+        //System.out.println("IN ID: " + getId() + ", Ticket: " + tickets.get(getId()) + "\n\n");
 
         for (int i = 0; i < tickets.length(); ++i){
             if (i != getId()){
-                while ( tickets.get(i) != 0 && (tickets.get(getId()) > tickets.get(i))){
+                while ( tickets.get(i) != 0 && (tickets.get(getId()) > tickets.get(i) ||
+                        (tickets.get(getId()) == tickets.get(i) && getId() > i))){
                     Thread.yield();
                 }
             }
         }
-
+        //System.out.println("OUT ID: " + getId() + ", Ticket: " + tickets.get(getId()) + "\n\n");
     }
 
     private int getAndChange() {
@@ -39,14 +43,16 @@ public class ImprovedBakeryLock extends AbstractFixnumLock {
             int ticket = currTicket.get();
             if (ticket == MAX) {
                 if (currTicket.compareAndSet(MAX, 1)) {
-                    lastThread = Thread.currentThread();
+                    lastThread.set(Thread.currentThread());
                     return MAX;
                 } else {
                     continue;
                 }
             }
             if (currTicket.compareAndSet(ticket, ticket + 1)) {
-                while (lastThread != null);
+                while (lastThread.get() != null) {
+                    Thread.yield();
+                }
                 return ticket;
             }
         }
@@ -54,10 +60,10 @@ public class ImprovedBakeryLock extends AbstractFixnumLock {
 
     @Override
     public void unlock() {
-        if (Thread.currentThread() == lastThread) {
-            lastThread = null;
-        }
         tickets.set(getId(), 0);
+        if (Thread.currentThread() == lastThread.get()) {
+            lastThread.set(null);
+        }
     }
 
 }
